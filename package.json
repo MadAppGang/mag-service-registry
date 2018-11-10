@@ -1,6 +1,6 @@
 {
   "name": "mag-service-registry",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Globally available central service registry",
   "main": "dist/index.js",
   "scripts": {
