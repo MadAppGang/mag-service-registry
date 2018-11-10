@@ -7,11 +7,13 @@
     "start": "nodemon --exec babel-node index.js",
     "build": "babel src -d dist",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "author": "dprovodnikov",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
+    "jest": "^23.6.0",
     "babel-cli": "^6.26.0",
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-regenerator": "^6.26.0",
@@ -19,8 +21,5 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1"
-  },
-  "devDependencies": {
-    "jest": "^23.6.0"
   }
 }

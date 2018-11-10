@@ -6,7 +6,7 @@ describe('initServiceRegistry test suit', () => {
   });
 
   test('returns a promise', () => {
-    expect(initServiceRegistry()).toBeInstanceOf(Promise);
+    expect(initServiceRegistry(jest.fn())).toBeInstanceOf(Promise);
   });
 
   test('resolves to Registry', () => {

@@ -1,4 +1,4 @@
 node_modules
 coverage
 src
-tests
+__tests__
