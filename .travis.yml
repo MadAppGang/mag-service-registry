@@ -4,9 +4,10 @@ node_js:
 
 before_script:
   - npm install
+  - npm run build
 
 script:
-  - npm test
+  - npm run test
 
 #safelist
 branches:
