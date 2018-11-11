@@ -12,7 +12,8 @@ function createServiceRegistry() {
 
   return {
     services,
-    register, get,
+    register,
+    get,
   };
 };
 
