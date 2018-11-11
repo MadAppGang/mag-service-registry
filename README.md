@@ -13,7 +13,7 @@ Register your services once and than access them elsewhere by just importing reg
 You want to initialize your services right after the application starts right? The place to do it is the applications entry point.
 The issue is that you would then have to export services from the entry point module, which is not a good thing to do. Entry point code should only be run once. If you're exporting logic in your entry point module, you're probably better off moving that functionality in to a re-usable module.
 
-Using the service registry you can configure your services at one place, and then import them from another. This simple prevents the case when you import something from entry point. and this packages intent is to help you with that.
+Using the service registry you can configure your services at one place, and then import them from another.
 
 ## How do you use it?
 First off you need to install it. It is available on npm.
@@ -48,7 +48,7 @@ Then you simply access you services in another file
   console.log(ServiceRegistry.services.exampleService); // { id: 'EXAMPLE_SERVICE' }
 ```
 
-As you can see to ran the configuration at the entry point, but access the results from another place. That is the beauty of this package.
+As you can see you ran the configuration at the entry point, but access the results from another place. That is the beauty of this package.
 
 ### Asynchronous operations
 Your services may require some time to initialize, so you might want to make *configureServices* asynchronous. And this is possible here.
