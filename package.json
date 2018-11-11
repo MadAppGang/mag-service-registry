@@ -5,11 +5,7 @@
   "main": "dist/index.js",
   "homepage": "https://github.com/MadAppGang/mag-service-registry",
   "keywords": [
-    "service",
-    "registry",
-    "locator",
-    "async",
-    "global"
+    "service", "registry", "locator", "async", "global"
   ],
   "repository": {
     "type": "git",
@@ -20,7 +16,7 @@
     "build": "babel src -d dist",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:cov": "jest --coverage"
   },
   "author": "dprovodnikov",
   "license": "MIT",
