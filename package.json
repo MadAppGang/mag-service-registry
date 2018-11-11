@@ -3,6 +3,11 @@
   "version": "1.0.2",
   "description": "Globally available central service registry",
   "main": "dist/index.js",
+  "homepage": "https://github.com/MadAppGang/mag-service-registry",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MadAppGang/mag-service-registry.git"
+  },
   "scripts": {
     "start": "nodemon --exec babel-node index.js",
     "build": "babel src -d dist",

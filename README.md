@@ -61,7 +61,7 @@ The following will work perfectly fine.
 ```
 
 Due to ability to handle asynchronous services during registration the *initServiceRegistry* becomes asynchronous as well.
-It returns registry after all the services are set and ready.
+It resolves to registry after all the services are set and ready.
 
 ```javascript
   const registry = await initServiceRegistry(configureServices);
@@ -71,15 +71,16 @@ It returns registry after all the services are set and ready.
 ```
 
 ## API
-**Registry**
+### Registry
 | Property | Type | Description |
 | --- | --- | --- |
 | register | function | This is used to register services. It accepts an object, keys of which are aliases, and values are services. You will then be able to access services by those aliases.
 | get | function | This is used to access registered services. It accepts a string as a parameter, which is an alias to get a service by.
 | services | object | This is basically a compiled object that holds a combined version of all register invocation results.
 
-**initServiceRegistry**
-Accepts a function that is going to be called with registry as a first argument. Awaits for the function to finish and then resolves to registry. Is asynchronous.
+
+### initServiceRegistry
+It accepts a function that is going to be called with registry as a first argument. Awaits for the function to finish and then resolves to registry. Is asynchronous.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
