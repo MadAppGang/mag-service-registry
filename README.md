@@ -2,7 +2,7 @@ Service registry
 ===
 
 [![npm version](https://badge.fury.io/js/mag-service-registry.svg)](https://badge.fury.io/js/mag-service-registry) [![Build Status](https://travis-ci.org/MadAppGang/mag-service-registry.svg?branch=master)](https://travis-ci.org/MadAppGang/mag-service-registry)
-[![Coverage Status](https://coveralls.io/repos/github/opf/openproject/badge.svg?branch=dev)](https://coveralls.io/github/opf/openproject?branch=dev)
+[![Coverage Status](https://coveralls.io/repos/github/MadAppGang/mag-service-registry/badge.svg?branch=master)](https://coveralls.io/github/MadAppGang/mag-service-registry?branch=master)
 ## What is it?
 This package implements a concept of a globally available registry that enables access to your services throughout the application.
 It is quite similar to service locator software development pattern.
