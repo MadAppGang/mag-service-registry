@@ -5,7 +5,7 @@ describe('initRegistry test suit', () => {
   const inputFunc = jest.fn();
 
   beforeEach(() => {
-    registry.disposeRegistered = jest.fn(() => 15);
+    registry.exposeRegistered = jest.fn(() => 15);
     registry.register = jest.fn();
   });
 
@@ -27,16 +27,16 @@ describe('initRegistry test suit', () => {
     const populateRegistry = initRegistry(registry);
 
     populateRegistry(inputFunc).then(() => {
-      expect(registry.disposeRegistered).toHaveBeenCalled();
+      expect(registry.exposeRegistered).toHaveBeenCalled();
       done();
     });
   });
 
-  test('populateRegistry resolves to disposeRegistered invocation result', (done) => {
+  test('populateRegistry resolves to exposeRegistered invocation result', (done) => {
     const populateRegistry = initRegistry(registry);
     
     populateRegistry(inputFunc).then((result) => {
-      expect(result).toEqual(registry.disposeRegistered());
+      expect(result).toEqual(registry.exposeRegistered());
       done();
     });
   });

@@ -16,9 +16,9 @@ describe('createRegistry test suit', () => {
     expect(registry.register).toBeInstanceOf(Function);
   });
 
-  test('has "disposeRegistered" public method', () => {
-    expect(registry).toHaveProperty('disposeRegistered');
-    expect(registry.disposeRegistered).toBeInstanceOf(Function);
+  test('has "exposeRegistered" public method', () => {
+    expect(registry).toHaveProperty('exposeRegistered');
+    expect(registry.exposeRegistered).toBeInstanceOf(Function);
   });
 
   test('registered services are available on "services" property', () => {
@@ -27,7 +27,7 @@ describe('createRegistry test suit', () => {
 
     registry.register({ httpService, storageService });
 
-    const registered = registry.disposeRegistered();
+    const registered = registry.exposeRegistered();
 
     expect(registered.httpService).toBe(httpService);
     expect(registered.storageService).toBe(storageService);

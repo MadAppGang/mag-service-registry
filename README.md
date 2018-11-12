@@ -32,13 +32,13 @@ const registry = createRegistry();
 // you will call this when you need to register something.
 export const populateServiceRegistry = initRegistry(registry);
 
-// export everything that has been registered
-export default registry.disposeRegistered();
+// export everything that will be registered (since it's not happening here)
+export default registry.exposeRegistered();
 
 ```
-See the main idea is that you export everything that has been registered on the registry instance from here
+See the main idea is that you export everything that has been registered from here
 and than every piece of you app that needs access to the registered logic will import it from this very place.
-However the registering isn't happening here, **it is delegated somewhere else**.
+However the registering isn't happening here - **it is delegated somewhere else**.
 
 ### Registering logic
 All you need to do now is to init your logic and get it registered globally.
@@ -82,11 +82,12 @@ const services = await populateServiceRegistry(registerServices);
 
 ## API
 ### Registry
-Registry is created with packages *createRegistry* method
+Registry is created with packages *createRegistry* method.
+
 | Property | Type | Description |
 | --- | --- | --- |
 | register | function | This is used to register units. It accepts an object, keys of which are aliases, and values are units. You will then be able to access units by those aliases.
-| disposeRegistered | function | This returns the object that holds everything that has ever been registered to this instance of registry.
+| exposeRegistered | function | This returns the object that holds everything that has ever been registered to this instance of registry.
 Example:
 ```javascript
 const registry = createRegistry();

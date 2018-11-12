@@ -8,10 +8,10 @@ function createRegistry() {
   const register = units =>
     Object.entries(units).map(entry => registerUnit(...entry));
 
-  const disposeRegistered = () => registered;
+  const exposeRegistered = () => registered;
 
   return {
-    register, disposeRegistered,
+    register, exposeRegistered,
   };
 };
 
