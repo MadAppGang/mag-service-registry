@@ -38,7 +38,7 @@ export default registry.exposeRegistered();
 ```
 See the main idea is that you export everything that has been registered from here
 and than every piece of you app that needs access to the registered logic will import it from this very place.
-However the registering isn't happening here - **it is delegated somewhere else**.
+**This is exactly how you avoid importing stuff from the entry point**. You register logic **there**, but then import it **from here**.
 
 ### Registering logic
 All you need to do now is to init your logic and get it registered globally.
