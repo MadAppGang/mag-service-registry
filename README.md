@@ -4,16 +4,15 @@ Service registry
 [![npm version](https://badge.fury.io/js/mag-service-registry.svg)](https://badge.fury.io/js/mag-service-registry) [![Build Status](https://travis-ci.org/MadAppGang/mag-service-registry.svg?branch=master)](https://travis-ci.org/MadAppGang/mag-service-registry)
 [![Coverage Status](https://coveralls.io/repos/github/MadAppGang/mag-service-registry/badge.svg?branch=master)](https://coveralls.io/github/MadAppGang/mag-service-registry?branch=master)
 ## What is it?
-This package implements a concept of a globally available registry that enables access to your services throughout the application.
+This package implements a concept of a globally available registry that enables access to your logic throughout the application.
 It is quite similar to service locator software development pattern.
 
-Register your services once and than access them elsewhere by just importing registry from the package.
-
 ## What might you need it for?
-You want to initialize your services right after the application starts right? The place to do it is the applications entry point.
+You want to initialize your logic right after the application starts. The place to do it is the applications entry point.
 The issue is that you would then have to export services from the entry point module, which is not a good thing to do. Entry point code should only be run once. If you're exporting logic in your entry point module, you're probably better off moving that functionality in to a re-usable module.
 
-Using the service registry you can configure your services at one place, and then import them from another.
+With this package you can create a registry and export it at one place, but **delegate the registering to another**.
+This is the key idea of the package.
 
 ## How do you use it?
 First off you need to install it. It is available on npm.
@@ -21,68 +20,101 @@ First off you need to install it. It is available on npm.
 $ npm install --save mag-service-registry
 ```
 
-### Configuring services
-All you need to do now is to init your services and get them registered globally.
+### Creating a registry
 ```javascript
-  // index.js [your entry point js file]
+// serviceRegistry.js
 
-  import { initServiceRegistry } from 'mag-service-registry';
+import { createRegistry, initRegistry } from 'mag-service-registry';
 
-  const configureServices = (registry) => {
-    // here you can access the registry, so this is the right place to run your services for the first time
-    const exampleService = { id: 'EXAMPLE_SERVICE' };
+// create an instance
+const registry = createRegistry();
 
-    registry.register({ exampleService });
-  };
+// you will call this when you need to register something.
+export const populateServiceRegistry = initRegistry(registry);
 
-  initServiceRegistry(configureServices);
+// export everything that has been registered
+export default registry.disposeRegistered();
+
+```
+See the main idea is that you export everything that has been registered on the registry instance from here
+and than every piece of you app that needs access to the registered logic will import it from this very place.
+However the registering isn't happening here, **it is delegated somewhere else**.
+
+### Registering logic
+All you need to do now is to init your logic and get it registered globally.
+```javascript
+// index.js [your entry point js file]
+
+// remember how we created this function at the example above?
+import { populateServiceRegistry } from './serviceRegistry';
+
+populateServiceRegistry((register) => {
+  // here you can register stuff, so this is the right place to run your logic for the first time
+  const exampleService = { id: 'EXAMPLE_SERVICE' };
+
+  register({ exampleService });
+});
 ```
 
-### Accessing services
+### Accessing logic
 Then you simply access you services in another file
 ```javascript
-  // anotherFile.js
+// anotherFile.js
 
-  import ServiceRegistry from 'mag-service-registry';
+// this is imported from the place where the registry was created
+import Services from './serviceRegistry';
 
-  console.log(ServiceRegistry.services.exampleService); // { id: 'EXAMPLE_SERVICE' }
+console.log(Services.exampleService); // { id: 'EXAMPLE_SERVICE' }
 ```
 
-As you can see you ran the configuration at the entry point, but access the results from another place. That is the beauty of this package.
+As you can see you did the registering at the entry point, but access the results from another place. That is the whole purpose of the package.
 
-### Asynchronous operations
-Your services may require some time to initialize, so you might want to make *configureServices* asynchronous. And this is possible here.
-
-The following will work perfectly fine.
-```javascript
-  const async configureServices = (registry) => {
-    const exampleService = await initExampleService();
-
-    registry.register({ exampleService });
-  };
-```
-
-Due to ability to handle asynchronous services during registration the *initServiceRegistry* becomes asynchronous as well.
-It resolves to registry after all the services are set and ready.
+*populateServiceRegistry* is an asynchronous function. It waits for all of your logic to get registered and after all resolves to the registering result.
+(in case you want to inject it somewhere)
 
 ```javascript
-  const registry = await initServiceRegistry(configureServices);
+// registerServices may return a promise, this what makes "populate" function asynchronous.
+const services = await populateServiceRegistry(registerServices);
 
-  // Do the rest of you application initialization here.
-  // Services are initialized and registered globally at this point.
+// Do the rest of you application initialization here.
+// Services are initialized and registered globally at this point.
 ```
 
 ## API
 ### Registry
+Registry is created with packages *createRegistry* method
 | Property | Type | Description |
 | --- | --- | --- |
-| register | function | This is used to register services. It accepts an object, keys of which are aliases, and values are services. You will then be able to access services by those aliases.
-| get | function | This is used to access registered services. It accepts a string as a parameter, which is an alias to get a service by.
-| services | object | This is basically a compiled object that holds a combined version of all register invocation results.
+| register | function | This is used to register units. It accepts an object, keys of which are aliases, and values are units. You will then be able to access units by those aliases.
+| disposeRegistered | function | This returns the object that holds everything that has ever been registered to this instance of registry.
+Example:
+```javascript
+const registry = createRegistry();
+...
+```
 
 
-### initServiceRegistry
-It accepts a function that is going to be called with registry as a first argument. Awaits for the function to finish and then resolves to registry. Is asynchronous.
+### initRegistry
+This is a function that accepts an instance of a registry and returns a *populateRegistry* function. The idea of *populateRegistry* is described down below.
+Example:
+```javascript
+...
+const populateRegistry = initRegistry(registry);
+...
+```
+
+### populateRegistry
+This is a function. It accepts a function as a first argument, that is going to receive the *register* method of your registry instance.
+Inside this function you can register your units. 
+Example:
+```javascript
+...
+populateRegistry((register) => {
+  // Here you have access to the "register" method of you registry.
+  // This is the place to register all your units.
+  // This function can be asynchronous (can return a promise)
+});
+```
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.

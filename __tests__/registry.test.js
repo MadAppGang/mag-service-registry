@@ -1,38 +1,35 @@
-import Registry from '..';
+import { createRegistry } from '..';
 
-describe('Registry test suit', () => {
-  test('is an object', () => {
-    expect(Registry).toBeInstanceOf(Object);
+describe('createRegistry test suit', () => {
+  let registry = null;
+
+  beforeEach(() => {
+    registry = createRegistry();
   });
 
-  test('has "services" public property', () => {
-    expect(Registry).toHaveProperty('services');
-    expect(Registry.services).toBeInstanceOf(Object);
+  test('createRegistry is a function', () => {
+    expect(createRegistry).toBeInstanceOf(Function);
   });
 
   test('has "register" public method', () => {
-    expect(Registry).toHaveProperty('register');
-    expect(Registry.register).toBeInstanceOf(Function);
+    expect(registry).toHaveProperty('register');
+    expect(registry.register).toBeInstanceOf(Function);
   });
 
-  test('has "get" public method', () => {
-    expect(Registry).toHaveProperty('get');
-    expect(Registry.get).toBeInstanceOf(Function);
+  test('has "disposeRegistered" public method', () => {
+    expect(registry).toHaveProperty('disposeRegistered');
+    expect(registry.disposeRegistered).toBeInstanceOf(Function);
   });
 
   test('registered services are available on "services" property', () => {
     const httpService = {};
+    const storageService = {};
 
-    Registry.register({ httpService });
+    registry.register({ httpService, storageService });
 
-    expect(Registry.services.httpService).toBe(httpService);
-  });
+    const registered = registry.disposeRegistered();
 
-  test('registered services are available through "get" property', () => {
-    const httpService = {};
-
-    Registry.register({ httpService });
-
-    expect(Registry.get('httpService')).toBe(httpService);
+    expect(registered.httpService).toBe(httpService);
+    expect(registered.storageService).toBe(storageService);
   });
 });

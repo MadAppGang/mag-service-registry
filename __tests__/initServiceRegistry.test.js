@@ -1,48 +1,52 @@
-import Registry, { initServiceRegistry } from '..';
+import { initRegistry } from '..';
 
-describe('initServiceRegistry test suit', () => {
+describe('initRegistry test suit', () => {
+  const registry = {};
+  const inputFunc = jest.fn();
+
+  beforeEach(() => {
+    registry.disposeRegistered = jest.fn(() => 15);
+    registry.register = jest.fn();
+  });
+
   test('is a function', () => {
-    expect(initServiceRegistry).toBeInstanceOf(Function);
+    expect(initRegistry).toBeInstanceOf(Function);
   });
 
-  test('returns a promise', () => {
-    expect(initServiceRegistry(jest.fn())).toBeInstanceOf(Promise);
+  test('returns a function', () => {
+    const populateRegistry = initRegistry(registry);
+    expect(populateRegistry).toBeInstanceOf(Function);
   });
 
-  test('resolves to Registry', () => {
-    expect.assertions(1);
-    expect(initServiceRegistry(jest.fn())).resolves.toBe(Registry);
+  test('returned function returns a promise', () => {
+    const populateRegistry = initRegistry(registry);
+    expect(populateRegistry(inputFunc)).toBeInstanceOf(Promise);
   });
 
-  test('invokes "configure"', () => {
-    expect.assertions(1);
+  test('populateRegistry calls registry in the end', (done) => {
+    const populateRegistry = initRegistry(registry);
 
-    const configure = jest.fn();
-
-    initServiceRegistry(configure).then(() => {
-      expect(configure).toHaveBeenCalled();
+    populateRegistry(inputFunc).then(() => {
+      expect(registry.disposeRegistered).toHaveBeenCalled();
+      done();
     });
   });
 
-  test('invokes "configure" with registry', () => {
-    const configure = jest.fn();
-
-    initServiceRegistry(configure).then(() => {
-      expect(configure).toHaveBeenCalledWith(Registry);
+  test('populateRegistry resolves to disposeRegistered invocation result', (done) => {
+    const populateRegistry = initRegistry(registry);
+    
+    populateRegistry(inputFunc).then((result) => {
+      expect(result).toEqual(registry.disposeRegistered());
+      done();
     });
   });
 
-  test('registry contains registered services', () => {
-    expect.assertions(1);
-
-    const httpClient = { id: 'HTTP_CLIENT '};
-
-    const configure = (registry) => {
-      registry.register({ httpClient });
-    };
-
-    initServiceRegistry(configure).then((registry) => {
-      expect(registry.services.httpClient).toBe(httpClient);
+  test('populateRegistry invokes first-param function with "register" method of registry', (done) => {
+    const populateRegistry = initRegistry(registry);
+    
+    populateRegistry(inputFunc).then(() => {
+      expect(inputFunc).toHaveBeenCalledWith(registry.register);
+      done();
     });
   });
 });

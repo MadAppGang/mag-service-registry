@@ -1,7 +1,4 @@
-import 'babel-polyfill';
+import initRegistry from './initRegistry';
+import createRegistry from './createRegistry';
 
-import ServiceRegistry from './registry';
-import initServiceRegistry from './initServiceRegistry';
-
-export { initServiceRegistry };
-export default ServiceRegistry;
+export { initRegistry, createRegistry };
