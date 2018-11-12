@@ -1,6 +1,6 @@
 {
   "name": "mag-service-registry",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Globally available central service registry",
   "main": "dist/index.js",
   "homepage": "https://github.com/MadAppGang/mag-service-registry",
