@@ -1,10 +1,14 @@
-import { createRegistry } from '..';
+import createRegistry from '..';
 
 describe('createRegistry test suit', () => {
   let registry = null;
+  let httpService = null
+  let storageService = null;
 
   beforeEach(() => {
     registry = createRegistry();
+    httpService = {};
+    storageService = {};
   });
 
   test('createRegistry is a function', () => {
@@ -22,12 +26,23 @@ describe('createRegistry test suit', () => {
   });
 
   test('registered services are available on "services" property', () => {
-    const httpService = {};
-    const storageService = {};
-
     registry.register({ httpService, storageService });
 
     const registered = registry.exposeRegistered();
+
+    expect(registered.httpService).toBe(httpService);
+    expect(registered.storageService).toBe(storageService);
+  });
+
+  test('registered services are returned from "register"', () => {
+    const registered = registry.register({ httpService });
+
+    expect(registered.httpService).toBe(httpService);
+  });
+
+  test('object returned from "register" contains results of all previous "register" calls', () => {
+    registry.register({ httpService });
+    const registered = registry.register({ storageService });
 
     expect(registered.httpService).toBe(httpService);
     expect(registered.storageService).toBe(storageService);

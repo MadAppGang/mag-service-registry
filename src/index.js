@@ -1,4 +1,21 @@
-import initRegistry from './initRegistry';
-import createRegistry from './createRegistry';
+function createRegistry() {
+  const registered = {};
+  
+  const exposeRegistered = () => registered;
 
-export { initRegistry, createRegistry };
+  const registerUnit = (alias, unit) => {
+    registered[alias] = unit;
+  };
+
+  const register = (units) => {
+    Object.entries(units).map(entry => registerUnit(...entry));
+    
+    return exposeRegistered();
+  }
+
+  return {
+    register, exposeRegistered,
+  };
+};
+
+export default createRegistry;

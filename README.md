@@ -24,36 +24,40 @@ $ npm install --save mag-service-registry
 ```javascript
 // serviceRegistry.js
 
-import { createRegistry, initRegistry } from 'mag-service-registry';
+import createRegistry from 'mag-service-registry';
 
-// create an instance
-const registry = createRegistry();
+const { register, exposeRegistered } = createRegistry();
 
-// you will call this when you need to register something.
-export const populateServiceRegistry = initRegistry(registry);
+// here you delegate the registering so it can be performed in another file
+export { register };
 
-// export everything that will be registered (since it's not happening here)
-export default registry.exposeRegistered();
+export default exposeRegistered();
 
 ```
-See the main idea is that you export everything that has been registered from here
-and than every piece of you app that needs access to the registered logic will import it from this very place.
-**This is exactly how you avoid importing stuff from the entry point**. You register logic **there**, but then import it **from here**.
+Default import of this file is an object that contains all registered stuff. At first it is an empty object since nothing has been registered yet, but it's going to update each time you register something.
+
+The idea is that you register stuff somewhere else, but then access it from here.
 
 ### Registering logic
 All you need to do now is to init your logic and get it registered globally.
+
 ```javascript
-// index.js [your entry point js file]
+// entry point or whatever place you want to configure your services at
+...
 
-// remember how we created this function at the example above?
-import { populateServiceRegistry } from './serviceRegistry';
+const registerServices = async () => {
+  const httpService = await configureHttpService();
+  const storageService = await configureStorageService();
 
-populateServiceRegistry((register) => {
-  // here you can register stuff, so this is the right place to run your logic for the first time
-  const exampleService = { id: 'EXAMPLE_SERVICE' };
+  return register({
+    http: httpService,
+    storage: storageService,
+  });
+};
 
-  register({ exampleService });
-});
+const services = await registerServices();
+
+...
 ```
 
 ### Accessing logic
@@ -62,23 +66,15 @@ Then you simply access you services in another file
 // anotherFile.js
 
 // this is imported from the place where the registry was created
-import Services from './serviceRegistry';
+import services from './serviceRegistry';
 
-console.log(Services.exampleService); // { id: 'EXAMPLE_SERVICE' }
+console.log(services.http); // httpService
+console.log(services.storage); // storageService
 ```
 
-As you can see you did the registering at the entry point, but access the results from another place. That is the whole purpose of the package.
+As you can see you did the registering at the entry point, but access the results from servieRegistry.js
 
-*populateServiceRegistry* is an asynchronous function. It waits for all of your logic to get registered and after all resolves to the registering result.
-(in case you want to inject it somewhere)
-
-```javascript
-// registerServices may return a promise, this what makes "populate" function asynchronous.
-const services = await populateServiceRegistry(registerServices);
-
-// Do the rest of you application initialization here.
-// Services are initialized and registered globally at this point.
-```
+As simple as that.
 
 ## API
 ### Registry
@@ -86,36 +82,8 @@ Registry is created with packages *createRegistry* method.
 
 | Property | Type | Description |
 | --- | --- | --- |
-| register | function | This is used to register units. It accepts an object, keys of which are aliases, and values are units. You will then be able to access units by those aliases.
-| exposeRegistered | function | This returns the object that holds everything that has ever been registered to this instance of registry.
-Example:
-```javascript
-const registry = createRegistry();
-...
-```
-
-
-### initRegistry
-This is a function that accepts an instance of a registry and returns a *populateRegistry* function. The idea of *populateRegistry* is described down below.
-Example:
-```javascript
-...
-const populateRegistry = initRegistry(registry);
-...
-```
-
-### populateRegistry
-This is a function. It accepts a function as a first argument, that is going to receive the *register* method of your registry instance.
-Inside this function you can register your units. 
-Example:
-```javascript
-...
-populateRegistry((register) => {
-  // Here you have access to the "register" method of you registry.
-  // This is the place to register all your units.
-  // This function can be asynchronous (can return a promise)
-});
-```
+| register | function | This is used to register units. It accepts an object, keys of which are aliases, and values are units. You will then be able to access units by those aliases. Returns all that was ever registered.
+| exposeRegistered | function | This returns the object that holds everything that has ever been registered to this instance of registry. Returns all that was ever registered.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
