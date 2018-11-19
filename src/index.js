@@ -13,9 +13,9 @@ function createRegistry() {
     return exposeRegistered();
   }
 
-  return {
+  return Object.freeze({
     register, exposeRegistered,
-  };
+  });
 };
 
 export default createRegistry;
