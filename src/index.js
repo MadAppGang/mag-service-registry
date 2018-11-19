@@ -3,12 +3,10 @@ function createRegistry() {
   
   const exposeRegistered = () => registered;
 
-  const registerUnit = (alias, unit) => {
-    registered[alias] = unit;
-  };
-
   const register = (units) => {
-    Object.keys(units).map(alias => registerUnit(alias, units[alias]));
+    Object.keys(units).map((alias) => {
+      registered[alias] = units[alias];
+    });
     
     return exposeRegistered();
   }
