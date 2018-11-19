@@ -8,7 +8,7 @@ function createRegistry() {
   };
 
   const register = (units) => {
-    Object.entries(units).map(entry => registerUnit(...entry));
+    Object.keys(units).map(alias => registerUnit(alias, units[alias]));
     
     return exposeRegistered();
   }
