@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "nodemon --exec babel-node index.js",
-    "build": "babel src -d dist",
+    "build": "rm -rf dist && babel src -d dist",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage"
