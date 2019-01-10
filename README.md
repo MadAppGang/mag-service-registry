@@ -1,4 +1,4 @@
-Service registry
+Registry
 ===
 
 [![Build Status](https://travis-ci.org/MadAppGang/mag-service-registry.svg?branch=master)](https://travis-ci.org/MadAppGang/mag-service-registry)
@@ -17,14 +17,14 @@ This is the key idea of the package.
 ## How do you use it?
 First off you need to install it. It is available on npm.
 ```bash
-$ npm install --save mag-service-registry
+$ npm install --save @madappgang/registry
 ```
 
 ### Creating a registry
 ```javascript
 // serviceRegistry.js
 
-import createRegistry from 'mag-service-registry';
+import createRegistry from '@madappgang/registry';
 
 const { register, exposeRegistered } = createRegistry();
 

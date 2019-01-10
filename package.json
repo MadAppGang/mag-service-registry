@@ -1,5 +1,5 @@
 {
-  "name": "mag-service-registry",
+  "name": "@madappgang/registry",
   "version": "3.0.5",
   "description": "Globally available central service registry",
   "main": "dist/index.js",
