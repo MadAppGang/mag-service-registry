@@ -43,6 +43,7 @@ All you need to do now is to init your logic and get it registered globally.
 
 ```javascript
 // entry point or whatever place you want to configure your services at
+import { register } from './serviceRegistry';
 ...
 
 const registerServices = async () => {
