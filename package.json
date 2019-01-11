@@ -1,6 +1,6 @@
 {
   "name": "@madappgang/registry",
-  "version": "3.0.5",
+  "version": "3.0.7",
   "description": "Globally available central service registry",
   "main": "dist/index.js",
   "homepage": "https://github.com/MadAppGang/mag-service-registry",
@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "nodemon --exec babel-node index.js",
-    "build": "rm -rf dist && babel src -d dist",
+    "build": "rm -rf dist && babel src -d dist --ignore __tests__",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage"
